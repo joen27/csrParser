@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CSRParser</title>
+</head>
+
+<body>
+
+<input id="fileupload" type="file" name="fileupload"/>
+<br><br>
+<button id="upload-button" onclick="uploadFile()"> Upload</button>
+
+<script>
+    async function uploadFile() {
+        let formData = new FormData();
+        formData.append("file", fileupload.files[0]);
+        await fetch('/api/upload', {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(json => {
+                let li=`<tr></tr>`;
+                json.forEach(data => {
+                    li += `<tr>
+                <td>${data.key} </td>
+                <td>${data.value}</td>
+            </tr>`;
+                });
+
+                document.getElementById("csrContent").innerHTML = li;
+            });
+    }
+</script>
+
+<br><br>
+<div>
+    <table id="csrContent"></table>
+</div>
+
+</body>
+
+</html>
